@@ -1,4 +1,9 @@
-# Data-minning-project---3rd-year
+# IMDb Dataset Scraping
+
+> **IMDb rating project series:** **Part 1: Dataset scraping** (this repo) · [Part 2: Rating prediction](https://github.com/roeiraz12/imdb-rating-prediction) · [Part 3: Predictor web app](https://github.com/roeiraz12/imdb-rating-predictor-app)
+
+Collecting data from the web to create a large movie database
+
 Collecting data from the web to create a large movie database
 
 <div dir="rtl">
@@ -19,11 +24,20 @@ https://developer.imdb.com/non-commercial-datasets/
 
 ---
 
-> **Project series:** **Part 1 – Data collection (this repo)** → [Part 2 – Rating prediction](https://github.com/roeiraz12/Data-minning-project---3rd-year-part_2) → [Part 3 – Improved models](https://github.com/roeiraz12/Data-minning-project---3rd-year-part_3)
-
 ## Overview
 
 Part 1 of a third-year Data Mining course project. The goal was to build a movie dataset from scratch: the IMDb non-commercial datasets supply the core fields (title, year, genres, runtime, rating, votes, lead actors), and Python web scraping of Wikipedia adds fields IMDb does not provide (plot, language, country, budget, box office). The result is `all_data.csv` – 5,000 movies × 13 columns – which is the input for the modeling work in Parts 2 and 3.
+
+## Project story
+
+- **Problem.** The later parts of the project predict a movie's IMDb rating, which needs a dataset that combines
+  IMDb's structured fields with descriptive fields IMDb's public tables do not have, such as the plot, language,
+  country, budget and box office.
+- **Approach.** Filter and join the IMDb non-commercial tables, then scrape Wikipedia for the missing fields with a
+  fallback chain of URL variants, parse the infoboxes, turn money text into numbers, and merge and validate
+  everything into one CSV.
+- **Context and role.** Academic data-science project for a third-year Data Mining course. This repository
+  covers the data-collection stage, from the raw IMDb files to the final `all_data.csv` used in Parts 2 and 3.
 
 ## What was done
 
@@ -70,3 +84,13 @@ Budget and box office are sparse: many Wikipedia infoboxes for these (mostly old
 1. Install the dependencies: `pip install pandas requests beautifulsoup4 tqdm jupyter`
 2. Download the IMDb files listed above from <https://developer.imdb.com/non-commercial-datasets/> and place them next to the notebook.
 3. Open `Project_part_1.ipynb` and run the cells in order. The Wikipedia scraping steps make thousands of web requests and take a long time (the plot step alone took about 3 hours), so the ready-made `all_data.csv` is included in the repo.
+
+## What I'd do next
+
+- Read budget, box office, language and country from Wikidata or the Wikipedia API instead of parsing HTML
+  infoboxes, to raise the low budget and box-office coverage (about 12-13%).
+- Cache responses and run the scraper concurrently with rate limiting, since the plot step alone took about 3 hours.
+- Sample titles across all letters and years instead of titles starting with "E" or "F", so the dataset is more
+  representative and includes recent films.
+- Convert budgets to one currency and adjust them for inflation before modeling.
+- Move the notebook steps into scripts with a few tests, so the dataset can be rebuilt with one command.
